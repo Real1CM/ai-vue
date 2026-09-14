@@ -4,6 +4,7 @@ import {onMounted, ref, reactive} from "vue";
 import PageHead from "@/components/PageHead.vue";
 import TableSearch from "@/components/TableSearch.vue";
 import {categoryTree, articlePage} from "@/api/admin.js";
+import ArticleDialog from "@/components/ArticleDialog.vue";
 
 const formItem = [
   {comp: 'input', prop: 'title', label: '文章标题', placeholder: '请输入文章标题'},
@@ -50,7 +51,11 @@ const categoryMap = reactive({})
 
 const categories = ref([])
 
+// 列表数据
 const tableData = ref([])
+
+//新增编辑
+const dialogVisible = ref(false)
 
 onMounted(async () => {
   const data = await categoryTree()
@@ -72,8 +77,7 @@ onMounted(async () => {
   <div>
     <PageHead title="知识文章">
       <template #buttons>
-        <el-button type="primary">新增</el-button>
-        <el-button type="primary">编辑</el-button>
+        <el-button @click="dialogVisible = true" type="primary">新增</el-button>
       </template>
     </PageHead>
     <TableSearch :formItem="formItem" @search="handleSearch"/>
@@ -113,6 +117,7 @@ onMounted(async () => {
         :total="pagination.total"
          @change="handleChange"
     />
+    <ArticleDialog v-model:modelValue="dialogVisible" :categories="categories" />
   </div>
 </template>
 
