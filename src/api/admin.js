@@ -1,4 +1,4 @@
-import service from "@/utils/request.js";
+import service from '@/utils/request.js';
 
 export function login(data) {
     return service.post('/user/login', data)
@@ -47,5 +47,17 @@ export function deleteArticle(id) {
 }
 
 export function getConsultationPage(params) {
-    return service.get('/psychological-chat/sessions', {params })
+    return service.get('/psychological-chat/sessions', {params})
+}
+
+export function getSessionDetail(sessionId) {
+    return service.get(`/psychological-chat/sessions/${sessionId}/messages`)
+}
+
+export function getEmotionalPage(params) {
+    return service.get('/emotion-diary/admin/page', {params})
+}
+
+export function deleteEmotional(id) {
+    return service.delete(`/emotion-diary/admin/${id}`)
 }
