@@ -1,10 +1,12 @@
 import {createRouter, createWebHistory} from "vue-router"
 import BackendLayout from "@/components/BackendLayout.vue";
 import AuthLayout from "@/components/AuthLayout.vue";
+import FrontendLayout from "@/components/FrontendLayout.vue";
 
 const backendRoutes = [
     {
         path: '/back',
+        redirect: '/back/dashboard',
         component: BackendLayout,
         children: [
             {
@@ -43,14 +45,14 @@ const backendRoutes = [
         children: [
             {
                 path: 'login',
-                component: ()=>import ('@/views/login.vue'),
-                meta:{
+                component: () => import ('@/views/login.vue'),
+                meta: {
                     title: '登录'
                 }
-            },{
+            }, {
                 path: 'register',
-                component: ()=>import ('@/views/register.vue'),
-                meta:{
+                component: () => import ('@/views/register.vue'),
+                meta: {
                     title: '注册'
                 }
             }
@@ -58,9 +60,63 @@ const backendRoutes = [
     }
 ]
 
+const frontendRoutes = [
+    {
+        path: '/',
+        component: FrontendLayout,
+        children: [
+            {
+                path: '',
+                component: () => import('@/views/home.vue')
+            },{
+                path: 'consultation',
+                component:()=>import('@/views/consultation.vue')
+            },{
+                path: 'emotion-diary',
+                component: () => import('@/views/emotionDiary.vue')
+            },{
+
+                path: 'knowledge',
+                component: () => import('@/views/frontendKnowledge.vue')
+            }
+        ]
+    }
+]
+
 const router = createRouter({
     history: createWebHistory(),
-    routes: backendRoutes
+    routes: [...backendRoutes, ...frontendRoutes]
+})
+
+//路由前置守卫
+router.beforeEach((to, from, next) => {
+    const token = localStorage.getItem('token')
+    //当前用户是否登录
+    if (token) {
+        const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+        //后台
+        if (userInfo.userType === 2) {
+            if (to.path.startsWith('/back')) {
+                next()
+            } else {
+                next('/back/dashboard')
+            }
+        } else if (userInfo.userType === 1) {
+            //用户端
+            if(to.path.startsWith('/back')||to.path.startsWith('/auth')){
+                next('/')
+            } else {
+                next()
+            }
+        }
+    } else {
+        if (to.path.startsWith('/back')) {
+            //如果访问后台
+            next('/auth/login')
+        } else {
+            next()
+        }
+    }
 })
 
 export default router
