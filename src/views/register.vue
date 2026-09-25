@@ -4,6 +4,8 @@ import {register} from '@/api/frontend'
 import {ElMessage} from 'element-plus'
 import {useRouter} from "vue-router";
 
+const router = useRouter()
+
 const formData = reactive({
   "username": "",
   "email": "",
@@ -31,13 +33,12 @@ const rules = reactive({
 })
 
 //表单提交
-const router = useRouter()
-
 const submitFormRef = ref(null)
 const submitForm = async (formEl) => {
   if (!formEl) return
   formEl.validate(async (valid) => {
     register(formData).then(({data}) => {
+      console.log(data)
       if(!data) {
         ElMessage.success('注册成功')
         //跳转登录
