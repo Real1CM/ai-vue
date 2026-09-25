@@ -68,16 +68,20 @@ const frontendRoutes = [
             {
                 path: '',
                 component: () => import('@/views/home.vue')
-            },{
+            }, {
                 path: 'consultation',
-                component:()=>import('@/views/consultation.vue')
-            },{
+                component: () => import('@/views/consultation.vue')
+            }, {
                 path: 'emotion-diary',
                 component: () => import('@/views/emotionDiary.vue')
-            },{
+            }, {
 
                 path: 'knowledge',
                 component: () => import('@/views/frontendKnowledge.vue')
+            }, {
+                path: 'knowledge/article/:id',
+                component: () => import('@/views/articleDetail.vue'),
+                props: true
             }
         ]
     }
@@ -103,7 +107,7 @@ router.beforeEach((to, from, next) => {
             }
         } else if (userInfo.userType === 1) {
             //用户端
-            if(to.path.startsWith('/back')||to.path.startsWith('/auth')){
+            if (to.path.startsWith('/back') || to.path.startsWith('/auth')) {
                 next('/')
             } else {
                 next()
