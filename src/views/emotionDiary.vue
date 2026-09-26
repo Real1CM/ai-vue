@@ -74,8 +74,8 @@ const imageUrl = new URL('@/assets/images/like.png', import.meta.url).href
           <div class="rate">
             <el-rate
                 v-model="diaryForm.moodScore"
-                :text="emotionStatus"
-                show-texts
+                :texts="emotionStatus"
+                show-text
                 :max="10"
                 size="large"
             />

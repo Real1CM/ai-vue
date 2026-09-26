@@ -2,6 +2,7 @@
 import {ref, reactive} from "vue";
 import {login} from '@/api/admin'
 import {useRouter} from "vue-router";
+import {Back} from "@element-plus/icons-vue";
 
 const ruleFormRef = ref()
 
@@ -48,7 +49,7 @@ const submitForm = async (formEl) => {
 <template>
   <div class="container">
     <div class="title">
-      <div class="back-home">
+      <div class="back-home" @click="router.push('/')">
         <el-icon>
           <Back/>
         </el-icon>
